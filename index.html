@@ -49,7 +49,13 @@
       <table class="min-w-full bg-card rounded shadow text-left">
         <thead class="bg-gray-600 text-white">
           <tr>
-            <th class="p-2">Player</th><th class="p-2">Team</th><th class="p-2">G</th><th class="p-2">A</th><th class="p-2">PTS</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('player')">Player</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('team')">Team</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('goals')">G</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('assists')">A</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('pts')">PTS</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('plusMinus')">+/-</th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('touches')">Touches</th>
           </tr>
         </thead>
         <tbody id="player-stats-body"></tbody>
@@ -83,6 +89,15 @@
       document.documentElement.classList.toggle('dark');
     }
 
+    let sortedPlayers = [];
+    let currentSortKey = 'pts';
+
+    function sortPlayers(key) {
+      currentSortKey = key;
+      sortedPlayers.sort((a, b) => b[key] - a[key]);
+      renderPlayers(document.getElementById('player-team-filter').value);
+    }
+
     async function fetchData() {
       const [players, goalies, standings] = await Promise.all([
         fetch('player_stats.json').then(res => res.json()),
@@ -109,20 +124,28 @@
 
       const playerBody = document.getElementById('player-stats-body');
       const playerTeamFilter = document.getElementById('player-team-filter');
-      let sortedPlayers = players.map(p => ({...p, pts: p.goals + p.assists})).sort((a, b) => b.pts - a.pts);
+
+      sortedPlayers = players.map(p => ({
+        ...p,
+        pts: p.goals + p.assists,
+        plusMinus: p.plusMinus || 0,
+        touches: p.touches || 0
+      })).sort((a, b) => b[currentSortKey] - a[currentSortKey]);
 
       function renderPlayers(filter = '') {
         playerBody.innerHTML = '';
         sortedPlayers.filter(p => !filter || p.team === filter).forEach(p => {
           playerBody.innerHTML += `<tr>
             <td class="p-2 flex items-center gap-2">
-              <img src="https://minotar.net/avatar/${p.player}/75.png" class="w-6 h-6 rounded">
+              <img src="https://crafatar.com/avatars/${p.player}?size=32&overlay&default=name" class="w-6 h-6 rounded">
               ${p.player}
             </td>
             <td class="p-2">${p.team}</td>
             <td class="p-2">${p.goals}</td>
             <td class="p-2">${p.assists}</td>
             <td class="p-2">${p.pts}</td>
+            <td class="p-2">${p.plusMinus}</td>
+            <td class="p-2">${p.touches}</td>
           </tr>`;
         });
       }
