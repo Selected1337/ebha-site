@@ -1,14 +1,14 @@
 [
-  {
-    "player": "JakeR",
-    "team": "Red Rockets",
-    "goals": 8,
-    "assists": 5
-  },
-  {
-    "player": "StickSniper",
-    "team": "Blue Blades",
-    "goals": 6,
-    "assists": 4
-  }
+    {
+        "player": "Tendy41",
+        "team": "Galaxy",
+        "goals": 1,
+        "assists": 0
+    },
+    {
+        "player": "Softees",
+        "team": "Galaxy",
+        "goals": 3,
+        "assists": 4
+    }
 ]
