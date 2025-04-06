@@ -1,0 +1,20 @@
+[
+  {
+    "team": "Red Rockets",
+    "wins": 5,
+    "losses": 1,
+    "otl": 0,
+    "points": 10,
+    "gf": 25,
+    "ga": 12
+  },
+  {
+    "team": "Blue Blades",
+    "wins": 4,
+    "losses": 2,
+    "otl": 0,
+    "points": 8,
+    "gf": 22,
+    "ga": 17
+  }
+]

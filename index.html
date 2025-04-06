@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minecraft Hockey League</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <header class="bg-blue-600 text-white p-4 shadow-md">
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold text-center">Minecraft Ball Hockey League</h1>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-6 space-y-12">
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Standings</h2>
+      <table class="min-w-full bg-white rounded shadow text-left">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2">Team</th><th class="p-2">W</th><th class="p-2">L</th><th class="p-2">OTL</th><th class="p-2">PTS</th><th class="p-2">GF</th><th class="p-2">GA</th>
+          </tr>
+        </thead>
+        <tbody id="standings-body"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Player Stats</h2>
+      <table class="min-w-full bg-white rounded shadow text-left">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2">Player</th><th class="p-2">Team</th><th class="p-2">G</th><th class="p-2">A</th><th class="p-2">PTS</th>
+          </tr>
+        </thead>
+        <tbody id="player-stats-body"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Goalie Stats</h2>
+      <table class="min-w-full bg-white rounded shadow text-left">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2">Goalie</th><th class="p-2">Team</th><th class="p-2">SA</th><th class="p-2">GA</th><th class="p-2">Save %</th><th class="p-2">GAA</th>
+          </tr>
+        </thead>
+        <tbody id="goalie-stats-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="bg-blue-600 text-white p-4 text-center">
+    &copy; 2025 Minecraft Hockey League | CBHA
+  </footer>
+
+  <script>
+    async function fetchData() {
+      const [players, goalies, standings] = await Promise.all([
+        fetch('player_stats.json').then(res => res.json()),
+        fetch('goalie_stats.json').then(res => res.json()),
+        fetch('standings.json').then(res => res.json())
+      ]);
+
+      const playerBody = document.getElementById('player-stats-body');
+      players.forEach(p => {
+        const pts = p.goals + p.assists;
+        playerBody.innerHTML += `<tr>
+          <td class="p-2">${p.player}</td>
+          <td class="p-2">${p.team}</td>
+          <td class="p-2">${p.goals}</td>
+          <td class="p-2">${p.assists}</td>
+          <td class="p-2">${pts}</td>
+        </tr>`;
+      });
+
+      const goalieBody = document.getElementById('goalie-stats-body');
+      goalies.forEach(g => {
+        const savePct = (1 - g.goals_against / g.shots_against).toFixed(3);
+        const gaa = (g.goals_against / g.games_played).toFixed(2);
+        goalieBody.innerHTML += `<tr>
+          <td class="p-2">${g.player}</td>
+          <td class="p-2">${g.team}</td>
+          <td class="p-2">${g.shots_against}</td>
+          <td class="p-2">${g.goals_against}</td>
+          <td class="p-2">${savePct}</td>
+          <td class="p-2">${gaa}</td>
+        </tr>`;
+      });
+
+      const standingsBody = document.getElementById('standings-body');
+      standings.sort((a, b) => b.points - a.points);
+      standings.forEach(t => {
+        standingsBody.innerHTML += `<tr>
+          <td class="p-2">${t.team}</td>
+          <td class="p-2">${t.wins}</td>
+          <td class="p-2">${t.losses}</td>
+          <td class="p-2">${t.otl}</td>
+          <td class="p-2">${t.points}</td>
+          <td class="p-2">${t.gf}</td>
+          <td class="p-2">${t.ga}</td>
+        </tr>`;
+      });
+    }
+
+    fetchData();
+  </script>
+</body>
+</html>

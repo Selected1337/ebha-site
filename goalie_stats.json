@@ -1,0 +1,16 @@
+[
+  {
+    "player": "GoaliePro",
+    "team": "Blue Blades",
+    "shots_against": 50,
+    "goals_against": 4,
+    "games_played": 3
+  },
+  {
+    "player": "BlockerBeast",
+    "team": "Red Rockets",
+    "shots_against": 40,
+    "goals_against": 5,
+    "games_played": 3
+  }
+]
