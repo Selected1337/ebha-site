@@ -1,23 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <title>Minecraft Hockey League</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#1f2937',
+            card: '#374151',
+            text: '#f3f4f6'
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-gray-100 text-gray-900">
-  <header class="bg-blue-600 text-white p-4 shadow-md">
-    <div class="container mx-auto">
-      <h1 class="text-2xl font-bold text-center">Minecraft Ball Hockey League</h1>
-    </div>
+<body class="bg-background text-text">
+  <header class="bg-blue-800 text-white p-4 shadow-md flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Minecraft Ball Hockey League</h1>
+    <button onclick="toggleTheme()" class="bg-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-600">Toggle Dark/Light Mode</button>
   </header>
 
   <main class="container mx-auto py-6 space-y-12">
     <section>
       <h2 class="text-xl font-semibold mb-2">Standings</h2>
-      <table class="min-w-full bg-white rounded shadow text-left">
-        <thead class="bg-gray-200">
+      <table class="min-w-full bg-card rounded shadow text-left">
+        <thead class="bg-gray-600 text-white">
           <tr>
             <th class="p-2">Team</th><th class="p-2">W</th><th class="p-2">L</th><th class="p-2">OTL</th><th class="p-2">PTS</th><th class="p-2">GF</th><th class="p-2">GA</th>
           </tr>
@@ -27,9 +40,14 @@
     </section>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Player Stats</h2>
-      <table class="min-w-full bg-white rounded shadow text-left">
-        <thead class="bg-gray-200">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-xl font-semibold">Player Stats</h2>
+        <select id="player-team-filter" class="bg-gray-700 text-white p-1 rounded">
+          <option value="">All Teams</option>
+        </select>
+      </div>
+      <table class="min-w-full bg-card rounded shadow text-left">
+        <thead class="bg-gray-600 text-white">
           <tr>
             <th class="p-2">Player</th><th class="p-2">Team</th><th class="p-2">G</th><th class="p-2">A</th><th class="p-2">PTS</th>
           </tr>
@@ -39,9 +57,14 @@
     </section>
 
     <section>
-      <h2 class="text-xl font-semibold mb-2">Goalie Stats</h2>
-      <table class="min-w-full bg-white rounded shadow text-left">
-        <thead class="bg-gray-200">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-xl font-semibold">Goalie Stats</h2>
+        <select id="goalie-team-filter" class="bg-gray-700 text-white p-1 rounded">
+          <option value="">All Teams</option>
+        </select>
+      </div>
+      <table class="min-w-full bg-card rounded shadow text-left">
+        <thead class="bg-gray-600 text-white">
           <tr>
             <th class="p-2">Goalie</th><th class="p-2">Team</th><th class="p-2">SA</th><th class="p-2">GA</th><th class="p-2">Save %</th><th class="p-2">GAA</th>
           </tr>
@@ -51,11 +74,15 @@
     </section>
   </main>
 
-  <footer class="bg-blue-600 text-white p-4 text-center">
+  <footer class="bg-blue-800 text-white p-4 text-center">
     &copy; 2025 Minecraft Hockey League | CBHA
   </footer>
 
   <script>
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
     async function fetchData() {
       const [players, goalies, standings] = await Promise.all([
         fetch('player_stats.json').then(res => res.json()),
@@ -63,45 +90,73 @@
         fetch('standings.json').then(res => res.json())
       ]);
 
-      const playerBody = document.getElementById('player-stats-body');
-      players.forEach(p => {
-        const pts = p.goals + p.assists;
-        playerBody.innerHTML += `<tr>
-          <td class="p-2">${p.player}</td>
-          <td class="p-2">${p.team}</td>
-          <td class="p-2">${p.goals}</td>
-          <td class="p-2">${p.assists}</td>
-          <td class="p-2">${pts}</td>
-        </tr>`;
-      });
-
-      const goalieBody = document.getElementById('goalie-stats-body');
-      goalies.forEach(g => {
-        const savePct = (1 - g.goals_against / g.shots_against).toFixed(3);
-        const gaa = (g.goals_against / g.games_played).toFixed(2);
-        goalieBody.innerHTML += `<tr>
-          <td class="p-2">${g.player}</td>
-          <td class="p-2">${g.team}</td>
-          <td class="p-2">${g.shots_against}</td>
-          <td class="p-2">${g.goals_against}</td>
-          <td class="p-2">${savePct}</td>
-          <td class="p-2">${gaa}</td>
-        </tr>`;
-      });
+      const teamLogos = {
+        'Team USA': 'logos/usa.png',
+        'Team Canada': 'logos/canada.png',
+        'Team Sweden': 'logos/sweden.png',
+        'Team Finland': 'logos/finland.png'
+      };
 
       const standingsBody = document.getElementById('standings-body');
       standings.sort((a, b) => b.points - a.points);
       standings.forEach(t => {
         standingsBody.innerHTML += `<tr>
-          <td class="p-2">${t.team}</td>
-          <td class="p-2">${t.wins}</td>
-          <td class="p-2">${t.losses}</td>
-          <td class="p-2">${t.otl}</td>
-          <td class="p-2">${t.points}</td>
-          <td class="p-2">${t.gf}</td>
-          <td class="p-2">${t.ga}</td>
+          <td class="p-2 flex items-center gap-2"><img src="${teamLogos[t.team]}" class="w-6 h-6"> ${t.team}</td>
+          <td class="p-2">${t.wins}</td><td class="p-2">${t.losses}</td><td class="p-2">${t.otl}</td>
+          <td class="p-2">${t.points}</td><td class="p-2">${t.gf}</td><td class="p-2">${t.ga}</td>
         </tr>`;
       });
+
+      const playerBody = document.getElementById('player-stats-body');
+      const playerTeamFilter = document.getElementById('player-team-filter');
+      let sortedPlayers = players.map(p => ({...p, pts: p.goals + p.assists})).sort((a, b) => b.pts - a.pts);
+
+      function renderPlayers(filter = '') {
+        playerBody.innerHTML = '';
+        sortedPlayers.filter(p => !filter || p.team === filter).forEach(p => {
+          playerBody.innerHTML += `<tr>
+            <td class="p-2">${p.player}</td>
+            <td class="p-2">${p.team}</td>
+            <td class="p-2">${p.goals}</td>
+            <td class="p-2">${p.assists}</td>
+            <td class="p-2">${p.pts}</td>
+          </tr>`;
+        });
+      }
+
+      [...new Set(players.map(p => p.team))].forEach(team => {
+        playerTeamFilter.innerHTML += `<option value="${team}">${team}</option>`;
+      });
+      playerTeamFilter.onchange = () => renderPlayers(playerTeamFilter.value);
+      renderPlayers();
+
+      const goalieBody = document.getElementById('goalie-stats-body');
+      const goalieTeamFilter = document.getElementById('goalie-team-filter');
+      let enrichedGoalies = goalies.map(g => ({
+        ...g,
+        savePct: +(1 - g.goals_against / g.shots_against).toFixed(3),
+        gaa: +(g.goals_against / g.games_played).toFixed(2)
+      })).sort((a, b) => b.savePct - a.savePct);
+
+      function renderGoalies(filter = '') {
+        goalieBody.innerHTML = '';
+        enrichedGoalies.filter(g => !filter || g.team === filter).forEach(g => {
+          goalieBody.innerHTML += `<tr>
+            <td class="p-2">${g.player}</td>
+            <td class="p-2">${g.team}</td>
+            <td class="p-2">${g.shots_against}</td>
+            <td class="p-2">${g.goals_against}</td>
+            <td class="p-2">${g.savePct.toFixed(3)}</td>
+            <td class="p-2">${g.gaa.toFixed(2)}</td>
+          </tr>`;
+        });
+      }
+
+      [...new Set(goalies.map(g => g.team))].forEach(team => {
+        goalieTeamFilter.innerHTML += `<option value="${team}">${team}</option>`;
+      });
+      goalieTeamFilter.onchange = () => renderGoalies(goalieTeamFilter.value);
+      renderGoalies();
     }
 
     fetchData();
