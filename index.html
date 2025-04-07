@@ -14,6 +14,15 @@
             background: '#111827',
             card: '#1f2937',
             text: '#e5e7eb'
+          },
+          keyframes: {
+            fadeSlide: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          },
+          animation: {
+            fadeSlide: 'fadeSlide 0.5s ease-out'
           }
         }
       }
@@ -62,7 +71,6 @@
           <select id="compare2" class="bg-gray-700 text-white p-1 rounded"></select>
         </div>
       </div>
-      <div id="comparison" class="grid grid-cols-2 gap-4 mb-4"></div>
       <table class="min-w-full bg-card rounded shadow text-left">
         <thead class="bg-gray-700 text-white">
           <tr>
@@ -89,11 +97,21 @@
       <table class="min-w-full bg-card rounded shadow text-left">
         <thead class="bg-gray-700 text-white">
           <tr>
-            <th class="p-2">Goalie</th><th class="p-2">Team</th><th class="p-2">SA</th><th class="p-2">GA</th><th class="p-2">Save %</th><th class="p-2">GAA</th>
+            <th class="p-2 cursor-pointer" onclick="sortGoalies('player')">Goalie <span id="arrow-goalie-player" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortGoalies('team')">Team <span id="arrow-goalie-team" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortGoalies('shots_against')">SA <span id="arrow-goalie-shots_against" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortGoalies('goals_against')">GA <span id="arrow-goalie-goals_against" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortGoalies('savePct')">Save % <span id="arrow-goalie-savePct" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortGoalies('gaa')">GAA <span id="arrow-goalie-gaa" class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="goalie-stats-body"></tbody>
       </table>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-2">Player Comparison</h2>
+      <div id="comparison" class="grid grid-cols-2 gap-4 animate-fadeSlide"></div>
     </section>
   </main>
 
@@ -110,12 +128,25 @@
     let currentSortKey = 'pts';
     let sortDirection = 'desc';
 
+    let sortedGoalies = [];
+    let goalieSortKey = 'savePct';
+    let goalieSortDirection = 'desc';
+
     function updateSortArrows() {
       const keys = ['player', 'team', 'goals', 'assists', 'pts', 'plusMinus', 'touches'];
       keys.forEach(k => {
         const arrow = document.getElementById(`arrow-${k}`);
         if (!arrow) return;
         arrow.textContent = currentSortKey === k ? (sortDirection === 'desc' ? '↓' : '↑') : '';
+      });
+    }
+
+    function updateGoalieSortArrows() {
+      const keys = ['player', 'team', 'shots_against', 'goals_against', 'savePct', 'gaa'];
+      keys.forEach(k => {
+        const arrow = document.getElementById(`arrow-goalie-${k}`);
+        if (!arrow) return;
+        arrow.textContent = goalieSortKey === k ? (goalieSortDirection === 'desc' ? '↓' : '↑') : '';
       });
     }
 
@@ -126,26 +157,32 @@
         currentSortKey = key;
         sortDirection = 'desc';
       }
-
-      sortedPlayers.sort((a, b) => {
-        const aVal = a[currentSortKey];
-        const bVal = b[currentSortKey];
-        return sortDirection === 'desc' ? bVal - aVal : aVal - bVal;
-      });
-
+      sortedPlayers.sort((a, b) => sortDirection === 'desc' ? b[key] - a[key] : a[key] - b[key]);
       updateSortArrows();
       renderPlayers();
+    }
+
+    function sortGoalies(key) {
+      if (goalieSortKey === key) {
+        goalieSortDirection = goalieSortDirection === 'desc' ? 'asc' : 'desc';
+      } else {
+        goalieSortKey = key;
+        goalieSortDirection = 'desc';
+      }
+      sortedGoalies.sort((a, b) => goalieSortDirection === 'desc' ? b[key] - a[key] : a[key] - b[key]);
+      updateGoalieSortArrows();
+      renderGoalies();
     }
 
     function renderComparison(p1, p2) {
       const container = document.getElementById('comparison');
       container.innerHTML = '';
       if (!p1 || !p2) return;
-
       [p1, p2].forEach(player => {
         container.innerHTML += `
-          <div class="bg-gray-800 p-4 rounded">
+          <div class="bg-gray-800 p-4 rounded animate-fadeSlide">
             <h3 class="text-lg font-semibold mb-2">${player.player}</h3>
+            <img src="https://minotar.net/armor/body/${player.player}/100.png" class="mb-2">
             <ul class="space-y-1">
               <li><strong>Team:</strong> ${player.team}</li>
               <li><strong>Goals:</strong> ${player.goals}</li>
@@ -168,9 +205,9 @@
 
       filtered.forEach((p, i) => {
         let rowClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-        playerBody.innerHTML += `<tr class="${rowClass}">
+        playerBody.innerHTML += `<tr class="${rowClass} animate-fadeSlide">
           <td class="p-2 flex items-center gap-2">
-            <img src="https://crafatar.com/avatars/${p.player}?size=32&overlay&default=name" class="w-6 h-6 rounded">
+            <img src="https://minotar.net/avatars/${p.player}?size=32&overlay" class="w-6 h-6 rounded">
             ${p.player}
           </td>
           <td class="p-2">${p.team}</td>
@@ -179,6 +216,22 @@
           <td class="p-2">${p.pts}</td>
           <td class="p-2">${p.plusMinus}</td>
           <td class="p-2">${p.touches}</td>
+        </tr>`;
+      });
+    }
+
+    function renderGoalies() {
+      const filter = document.getElementById('goalie-team-filter').value;
+      const goalieBody = document.getElementById('goalie-stats-body');
+      goalieBody.innerHTML = '';
+      sortedGoalies.filter(g => !filter || g.team === filter).forEach(g => {
+        goalieBody.innerHTML += `<tr class="animate-fadeSlide">
+          <td class="p-2">${g.player}</td>
+          <td class="p-2">${g.team}</td>
+          <td class="p-2">${g.shots_against}</td>
+          <td class="p-2">${g.goals_against}</td>
+          <td class="p-2">${g.savePct.toFixed(3)}</td>
+          <td class="p-2">${g.gaa.toFixed(2)}</td>
         </tr>`;
       });
     }
@@ -200,7 +253,7 @@
       const standingsBody = document.getElementById('standings-body');
       standings.sort((a, b) => b.points - a.points);
       standings.forEach(t => {
-        standingsBody.innerHTML += `<tr>
+        standingsBody.innerHTML += `<tr class="animate-fadeSlide">
           <td class="p-2 flex items-center gap-2"><img src="${teamLogos[t.team]}" class="w-6 h-6"> ${t.team}</td>
           <td class="p-2">${t.wins}</td><td class="p-2">${t.losses}</td><td class="p-2">${t.otl}</td>
           <td class="p-2">${t.points}</td><td class="p-2">${t.gf}</td><td class="p-2">${t.ga}</td>
@@ -239,33 +292,20 @@
       renderPlayers();
       updateSortArrows();
 
-      const goalieBody = document.getElementById('goalie-stats-body');
       const goalieTeamFilter = document.getElementById('goalie-team-filter');
-      let enrichedGoalies = goalies.map(g => ({
+      sortedGoalies = goalies.map(g => ({
         ...g,
         savePct: +(1 - g.goals_against / g.shots_against).toFixed(3),
         gaa: +(g.goals_against / g.games_played).toFixed(2)
-      })).sort((a, b) => b.savePct - a.savePct);
-
-      function renderGoalies(filter = '') {
-        goalieBody.innerHTML = '';
-        enrichedGoalies.filter(g => !filter || g.team === filter).forEach(g => {
-          goalieBody.innerHTML += `<tr>
-            <td class="p-2">${g.player}</td>
-            <td class="p-2">${g.team}</td>
-            <td class="p-2">${g.shots_against}</td>
-            <td class="p-2">${g.goals_against}</td>
-            <td class="p-2">${g.savePct.toFixed(3)}</td>
-            <td class="p-2">${g.gaa.toFixed(2)}</td>
-          </tr>`;
-        });
-      }
+      })).sort((a, b) => b[goalieSortKey] - a[goalieSortKey]);
 
       [...new Set(goalies.map(g => g.team))].forEach(team => {
         goalieTeamFilter.innerHTML += `<option value="${team}">${team}</option>`;
       });
-      goalieTeamFilter.onchange = () => renderGoalies(goalieTeamFilter.value);
+      goalieTeamFilter.onchange = () => renderGoalies();
+
       renderGoalies();
+      updateGoalieSortArrows();
     }
 
     fetchData();
