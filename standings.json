@@ -1,6 +1,6 @@
 [
   {
-    "team": "Red Rockets",
+    "team": "Team Canada",
     "wins": 5,
     "losses": 1,
     "otl": 0,
@@ -9,12 +9,21 @@
     "ga": 12
   },
   {
-    "team": "Blue Blades",
-    "wins": 4,
+    "team": "Team USA",
+    "wins": 1,
     "losses": 2,
     "otl": 0,
-    "points": 8,
-    "gf": 22,
+    "points": 2,
+    "gf": 43,
     "ga": 17
+  },
+  {
+    "team": "Team FInland",
+    "wins": 3,
+    "losses": 2,
+    "otl": 0,
+    "points": 6,
+    "gf": 11,
+    "ga": 23
   }
 ]
