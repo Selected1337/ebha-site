@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>Minecraft Hockey League</title>
+  <title>ELite Ball Hockey Association</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -40,7 +40,7 @@
 </head>
 <body class="bg-background text-text">
   <header class="bg-gray-900 text-white p-4 shadow-md flex justify-between items-center">
-    <h1 class="text-2xl font-bold">Minecraft Ball Hockey League</h1>
+    <h1 class="text-2xl font-bold">Elite Ball Hockey Association</h1>
     <div class="flex items-center gap-4">
       <input id="player-search" type="text" placeholder="Search player" class="bg-gray-700 text-white p-1 rounded text-sm" oninput="renderPlayers()">
       <button onclick="toggleTheme()" class="bg-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-600">Toggle Dark/Light Mode</button>
@@ -116,7 +116,7 @@
   </main>
 
   <footer class="bg-gray-900 text-white p-4 text-center">
-    &copy; 2025 Minecraft Hockey League | CBHA
+    &copy; 2025 Elite Ball Hockey Association | EBHA
   </footer>
 
   <script>
@@ -180,6 +180,9 @@
       body.innerHTML = '';
       sortedGoalies.filter(g => !filter || g.team === filter).forEach(g => {
         body.innerHTML += `<tr class="animate-fadeSlide">
+          <td class="p-2 flex items-center gap-2">
+            <img src="https://minotar.net/avatar/${g.player}/100.png" class="w-6 h-6 rounded">
+            ${g.player}</td>
           <td class="p-2">${g.player}</td>
           <td class="p-2">${g.team}</td>
           <td class="p-2">${g.shots_against}</td>
@@ -198,7 +201,7 @@
           <div class="bg-gray-800 p-4 rounded flex gap-4 items-center animate-fadeSlide">
             <img src="https://minotar.net/bust/${player.player}/100.png" class="rounded">
             <div>
-              <h3 class="text-lg font-semibold mb-2">${player.player}</h3>
+              <h3 class="text-lg font-bold mb-2">${player.player}</h3>
               <ul class="space-y-1">
                 <li><strong>Team:</strong> ${player.team}</li>
                 <li><strong>Goals:</strong> ${player.goals}</li>
