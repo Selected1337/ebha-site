@@ -215,9 +215,9 @@
 
     async function fetchData() {
       const [players, goalies, standings] = await Promise.all([
-        fetch('player_stats.json').then(res => res.json()),
-        fetch('goalie_stats.json').then(res => res.json()),
-        fetch('standings.json').then(res => res.json())
+        fetch(`player_stats.json?cacheBust=${Date.now()}`).then(res => res.json()),
+        fetch(`goalie_stats.json?cacheBust=${Date.now()}`).then(res => res.json()),
+        fetch(`standings.json?cacheBust=${Date.now()}`).then(res => res.json())
       ]);
 
       sortedPlayers = players.map(p => ({
@@ -272,8 +272,8 @@
           <td class="p-2">${t.ga}</td></tr>`;
       });
     }
-
     fetchData();
   </script>
 </body>
+</html>
 </html>
