@@ -63,13 +63,9 @@
     <section>
       <div class="flex justify-between items-center mb-2">
         <h2 class="text-xl font-semibold">Player Stats</h2>
-        <div class="flex items-center gap-2">
-          <select id="player-team-filter" class="bg-gray-700 text-white p-1 rounded">
-            <option value="">All Teams</option>
-          </select>
-          <select id="compare1" class="bg-gray-700 text-white p-1 rounded"></select>
-          <select id="compare2" class="bg-gray-700 text-white p-1 rounded"></select>
-        </div>
+        <select id="player-team-filter" class="bg-gray-700 text-white p-1 rounded">
+          <option value="">All Teams</option>
+        </select>
       </div>
       <table class="min-w-full bg-card rounded shadow text-left">
         <thead class="bg-gray-700 text-white">
@@ -111,6 +107,10 @@
 
     <section>
       <h2 class="text-xl font-semibold mb-2">Player Comparison</h2>
+      <div class="flex gap-4 mb-4">
+        <select id="compare1" class="bg-gray-700 text-white p-1 rounded"></select>
+        <select id="compare2" class="bg-gray-700 text-white p-1 rounded"></select>
+      </div>
       <div id="comparison" class="grid grid-cols-2 gap-4 animate-fadeSlide"></div>
     </section>
   </main>
@@ -120,58 +120,73 @@
   </footer>
 
   <script>
+    let sortedPlayers = [], currentSortKey = 'pts', sortDirection = 'desc';
+    let sortedGoalies = [], goalieSortKey = 'savePct', goalieSortDirection = 'desc';
+
     function toggleTheme() {
       document.documentElement.classList.toggle('dark');
     }
 
-    let sortedPlayers = [];
-    let currentSortKey = 'pts';
-    let sortDirection = 'desc';
-
-    let sortedGoalies = [];
-    let goalieSortKey = 'savePct';
-    let goalieSortDirection = 'desc';
-
     function updateSortArrows() {
-      const keys = ['player', 'team', 'goals', 'assists', 'pts', 'plusMinus', 'touches'];
-      keys.forEach(k => {
-        const arrow = document.getElementById(`arrow-${k}`);
-        if (!arrow) return;
-        arrow.textContent = currentSortKey === k ? (sortDirection === 'desc' ? '↓' : '↑') : '';
+      ['player','team','goals','assists','pts','plusMinus','touches'].forEach(k => {
+        document.getElementById(`arrow-${k}`).textContent = (currentSortKey === k) ? (sortDirection === 'desc' ? '↓' : '↑') : '';
       });
     }
 
     function updateGoalieSortArrows() {
-      const keys = ['player', 'team', 'shots_against', 'goals_against', 'savePct', 'gaa'];
-      keys.forEach(k => {
-        const arrow = document.getElementById(`arrow-goalie-${k}`);
-        if (!arrow) return;
-        arrow.textContent = goalieSortKey === k ? (goalieSortDirection === 'desc' ? '↓' : '↑') : '';
+      ['player','team','shots_against','goals_against','savePct','gaa'].forEach(k => {
+        document.getElementById(`arrow-goalie-${k}`).textContent = (goalieSortKey === k) ? (goalieSortDirection === 'desc' ? '↓' : '↑') : '';
       });
     }
 
     function sortPlayers(key) {
-      if (currentSortKey === key) {
-        sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
-      } else {
-        currentSortKey = key;
-        sortDirection = 'desc';
-      }
-      sortedPlayers.sort((a, b) => sortDirection === 'desc' ? b[key] - a[key] : a[key] - b[key]);
-      updateSortArrows();
-      renderPlayers();
+      if (currentSortKey === key) sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+      else { currentSortKey = key; sortDirection = 'desc'; }
+      sortedPlayers.sort((a,b) => sortDirection === 'desc' ? b[key] - a[key] : a[key] - b[key]);
+      updateSortArrows(); renderPlayers();
     }
 
     function sortGoalies(key) {
-      if (goalieSortKey === key) {
-        goalieSortDirection = goalieSortDirection === 'desc' ? 'asc' : 'desc';
-      } else {
-        goalieSortKey = key;
-        goalieSortDirection = 'desc';
-      }
-      sortedGoalies.sort((a, b) => goalieSortDirection === 'desc' ? b[key] - a[key] : a[key] - b[key]);
-      updateGoalieSortArrows();
-      renderGoalies();
+      if (goalieSortKey === key) goalieSortDirection = goalieSortDirection === 'desc' ? 'asc' : 'desc';
+      else { goalieSortKey = key; goalieSortDirection = 'desc'; }
+      sortedGoalies.sort((a,b) => goalieSortDirection === 'desc' ? b[key] - a[key] : a[key] - b[key]);
+      updateGoalieSortArrows(); renderGoalies();
+    }
+
+    function renderPlayers() {
+      const body = document.getElementById('player-stats-body');
+      const search = document.getElementById('player-search').value.toLowerCase();
+      const filter = document.getElementById('player-team-filter').value;
+      body.innerHTML = '';
+      const filtered = sortedPlayers.filter(p => (!filter || p.team === filter) && p.player.toLowerCase().includes(search));
+      filtered.forEach((p,i) => {
+        const rowClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+        body.innerHTML += `<tr class="${rowClass} animate-fadeSlide">
+          <td class="p-2 flex items-center gap-2">
+            <img src="https://minotar.net/avatar/${p.player}/100.png" class="w-6 h-6 rounded">
+            ${p.player}</td>
+          <td class="p-2">${p.team}</td>
+          <td class="p-2">${p.goals}</td>
+          <td class="p-2">${p.assists}</td>
+          <td class="p-2">${p.pts}</td>
+          <td class="p-2">${p.plusMinus}</td>
+          <td class="p-2">${p.touches}</td></tr>`;
+      });
+    }
+
+    function renderGoalies() {
+      const body = document.getElementById('goalie-stats-body');
+      const filter = document.getElementById('goalie-team-filter').value;
+      body.innerHTML = '';
+      sortedGoalies.filter(g => !filter || g.team === filter).forEach(g => {
+        body.innerHTML += `<tr class="animate-fadeSlide">
+          <td class="p-2">${g.player}</td>
+          <td class="p-2">${g.team}</td>
+          <td class="p-2">${g.shots_against}</td>
+          <td class="p-2">${g.goals_against}</td>
+          <td class="p-2">${g.savePct.toFixed(3)}</td>
+          <td class="p-2">${g.gaa.toFixed(2)}</td></tr>`;
+      });
     }
 
     function renderComparison(p1, p2) {
@@ -180,59 +195,19 @@
       if (!p1 || !p2) return;
       [p1, p2].forEach(player => {
         container.innerHTML += `
-          <div class="bg-gray-800 p-4 rounded animate-fadeSlide">
-            <h3 class="text-lg font-semibold mb-2">${player.player}</h3>
-            <img src="https://minotar.net/armor/body/${player.player}/100.png" class="mb-2">
-            <ul class="space-y-1">
-              <li><strong>Team:</strong> ${player.team}</li>
-              <li><strong>Goals:</strong> ${player.goals}</li>
-              <li><strong>Assists:</strong> ${player.assists}</li>
-              <li><strong>Points:</strong> ${player.pts}</li>
-              <li><strong>+/-:</strong> ${player.plusMinus}</li>
-              <li><strong>Touches:</strong> ${player.touches}</li>
-            </ul>
-          </div>`;
-      });
-    }
-
-    function renderPlayers() {
-      const playerBody = document.getElementById('player-stats-body');
-      const search = document.getElementById('player-search').value.toLowerCase();
-      const filter = document.getElementById('player-team-filter').value;
-
-      playerBody.innerHTML = '';
-      const filtered = sortedPlayers.filter(p => (!filter || p.team === filter) && p.player.toLowerCase().includes(search));
-
-      filtered.forEach((p, i) => {
-        let rowClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-        playerBody.innerHTML += `<tr class="${rowClass} animate-fadeSlide">
-          <td class="p-2 flex items-center gap-2">
-            <img src="https://minotar.net/avatars/${p.player}?size=32&overlay" class="w-6 h-6 rounded">
-            ${p.player}
-          </td>
-          <td class="p-2">${p.team}</td>
-          <td class="p-2">${p.goals}</td>
-          <td class="p-2">${p.assists}</td>
-          <td class="p-2">${p.pts}</td>
-          <td class="p-2">${p.plusMinus}</td>
-          <td class="p-2">${p.touches}</td>
-        </tr>`;
-      });
-    }
-
-    function renderGoalies() {
-      const filter = document.getElementById('goalie-team-filter').value;
-      const goalieBody = document.getElementById('goalie-stats-body');
-      goalieBody.innerHTML = '';
-      sortedGoalies.filter(g => !filter || g.team === filter).forEach(g => {
-        goalieBody.innerHTML += `<tr class="animate-fadeSlide">
-          <td class="p-2">${g.player}</td>
-          <td class="p-2">${g.team}</td>
-          <td class="p-2">${g.shots_against}</td>
-          <td class="p-2">${g.goals_against}</td>
-          <td class="p-2">${g.savePct.toFixed(3)}</td>
-          <td class="p-2">${g.gaa.toFixed(2)}</td>
-        </tr>`;
+          <div class="bg-gray-800 p-4 rounded flex gap-4 items-center animate-fadeSlide">
+            <img src="https://minotar.net/bust/${player.player}/100.png" class="rounded">
+            <div>
+              <h3 class="text-lg font-semibold mb-2">${player.player}</h3>
+              <ul class="space-y-1">
+                <li><strong>Team:</strong> ${player.team}</li>
+                <li><strong>Goals:</strong> ${player.goals}</li>
+                <li><strong>Assists:</strong> ${player.assists}</li>
+                <li><strong>Points:</strong> ${player.pts}</li>
+                <li><strong>+/-:</strong> ${player.plusMinus}</li>
+                <li><strong>Touches:</strong> ${player.touches}</li>
+              </ul>
+            </div></div>`;
       });
     }
 
@@ -243,69 +218,57 @@
         fetch('standings.json').then(res => res.json())
       ]);
 
-      const teamLogos = {
-        'Team USA': 'logos/usa.png',
-        'Team Canada': 'logos/canada.png',
-        'Team Sweden': 'logos/sweden.png',
-        'Team Finland': 'logos/finland.png'
-      };
-
-      const standingsBody = document.getElementById('standings-body');
-      standings.sort((a, b) => b.points - a.points);
-      standings.forEach(t => {
-        standingsBody.innerHTML += `<tr class="animate-fadeSlide">
-          <td class="p-2 flex items-center gap-2"><img src="${teamLogos[t.team]}" class="w-6 h-6"> ${t.team}</td>
-          <td class="p-2">${t.wins}</td><td class="p-2">${t.losses}</td><td class="p-2">${t.otl}</td>
-          <td class="p-2">${t.points}</td><td class="p-2">${t.gf}</td><td class="p-2">${t.ga}</td>
-        </tr>`;
-      });
-
-      const playerTeamFilter = document.getElementById('player-team-filter');
-      const compare1 = document.getElementById('compare1');
-      const compare2 = document.getElementById('compare2');
-
       sortedPlayers = players.map(p => ({
         ...p,
         pts: p.goals + p.assists,
         plusMinus: p.plusMinus || 0,
         touches: p.touches || 0
-      })).sort((a, b) => b[currentSortKey] - a[currentSortKey]);
+      })).sort((a,b) => b[currentSortKey] - a[currentSortKey]);
 
-      const playerNames = [...new Set(players.map(p => p.player))];
-      playerNames.forEach(name => {
-        compare1.innerHTML += `<option value="${name}">${name}</option>`;
-        compare2.innerHTML += `<option value="${name}">${name}</option>`;
+      const teams = [...new Set(players.map(p => p.team))];
+      const filter = document.getElementById('player-team-filter');
+      teams.forEach(t => filter.innerHTML += `<option value="${t}">${t}</option>`);
+      filter.onchange = renderPlayers;
+
+      const compare1 = document.getElementById('compare1');
+      const compare2 = document.getElementById('compare2');
+      players.forEach(p => {
+        compare1.innerHTML += `<option value="${p.player}">${p.player}</option>`;
+        compare2.innerHTML += `<option value="${p.player}">${p.player}</option>`;
       });
-
       compare1.onchange = () => {
         const p1 = sortedPlayers.find(p => p.player === compare1.value);
         const p2 = sortedPlayers.find(p => p.player === compare2.value);
         renderComparison(p1, p2);
-      };
+      }
       compare2.onchange = compare1.onchange;
 
-      [...new Set(players.map(p => p.team))].forEach(team => {
-        playerTeamFilter.innerHTML += `<option value="${team}">${team}</option>`;
-      });
-      playerTeamFilter.onchange = () => renderPlayers();
+      renderPlayers(); updateSortArrows();
 
-      renderPlayers();
-      updateSortArrows();
-
-      const goalieTeamFilter = document.getElementById('goalie-team-filter');
       sortedGoalies = goalies.map(g => ({
         ...g,
-        savePct: +(1 - g.goals_against / g.shots_against).toFixed(3),
-        gaa: +(g.goals_against / g.games_played).toFixed(2)
-      })).sort((a, b) => b[goalieSortKey] - a[goalieSortKey]);
+        savePct: 1 - g.goals_against / g.shots_against,
+        gaa: g.goals_against / g.games_played
+      })).sort((a,b) => b[goalieSortKey] - a[goalieSortKey]);
 
-      [...new Set(goalies.map(g => g.team))].forEach(team => {
-        goalieTeamFilter.innerHTML += `<option value="${team}">${team}</option>`;
+      const gTeams = [...new Set(goalies.map(g => g.team))];
+      const gFilter = document.getElementById('goalie-team-filter');
+      gTeams.forEach(t => gFilter.innerHTML += `<option value="${t}">${t}</option>`);
+      gFilter.onchange = renderGoalies;
+
+      renderGoalies(); updateGoalieSortArrows();
+
+      const standingsBody = document.getElementById('standings-body');
+      standings.sort((a,b) => b.points - a.points).forEach(t => {
+        standingsBody.innerHTML += `<tr class="animate-fadeSlide">
+          <td class="p-2">${t.team}</td>
+          <td class="p-2">${t.wins}</td>
+          <td class="p-2">${t.losses}</td>
+          <td class="p-2">${t.otl}</td>
+          <td class="p-2">${t.points}</td>
+          <td class="p-2">${t.gf}</td>
+          <td class="p-2">${t.ga}</td></tr>`;
       });
-      goalieTeamFilter.onchange = () => renderGoalies();
-
-      renderGoalies();
-      updateGoalieSortArrows();
     }
 
     fetchData();
