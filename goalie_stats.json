@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "player": "CookieMnstr1616",
+    "team": "Ice Hawks",
+    "shots_against": 31,
+    "goals_against": 6,
+    "saves": 25,
+    "games_played": 1
+  },
+  {
+    "player": "Softees",
+    "team": "Olympians",
+    "shots_against": 14,
+    "goals_against": 0,
+    "saves": 14,
+    "games_played": 1
+  }
+]
