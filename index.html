@@ -159,20 +159,23 @@
       const filter = document.getElementById('player-team-filter').value;
       body.innerHTML = '';
       const filtered = sortedPlayers.filter(p => (!filter || p.team === filter) && p.player.toLowerCase().includes(search));
-      filtered.forEach((p,i) => {
+      filtered.forEach((p, i) => {
         const rowClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
         body.innerHTML += `<tr class="${rowClass} animate-fadeSlide">
           <td class="p-2 flex items-center gap-2">
             <img src="https://minotar.net/avatar/${p.player}/100.png" class="w-6 h-6 rounded">
-            ${p.player}</td>
+            <a href="player.html?name=${encodeURIComponent(p.player)}" class="hover:underline text-blue-400">${p.player}</a>
+          </td>
           <td class="p-2">${p.team}</td>
           <td class="p-2">${p.goals}</td>
           <td class="p-2">${p.assists}</td>
           <td class="p-2">${p.pts}</td>
           <td class="p-2">${p.plusMinus}</td>
-          <td class="p-2">${p.touches}</td></tr>`;
+          <td class="p-2">${p.touches}</td>
+        </tr>`;
       });
     }
+
 
     function renderGoalies() {
       const body = document.getElementById('goalie-stats-body');
