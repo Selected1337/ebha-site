@@ -10,9 +10,17 @@
   {
     "player": "Softees",
     "team": "Olympians",
-    "shots_against": 14,
-    "goals_against": 0,
-    "saves": 14,
+    "shots_against": 34,
+    "goals_against": 1,
+    "saves": 33,
+    "games_played": 2
+  },
+  {
+    "player": "Tendy41",
+    "team": "Ice Hawks",
+    "shots_against": 34,
+    "goals_against": 7,
+    "saves": 27,
     "games_played": 1
   }
 ]
