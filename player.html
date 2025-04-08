@@ -1,0 +1,71 @@
+<!-- player.html -->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>Player Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#111827',
+            card: '#1f2937',
+            text: '#e5e7eb'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-text min-h-screen">
+  <main class="max-w-3xl mx-auto px-6 py-10">
+    <div class="flex items-center gap-6 mb-8">
+      <img id="player-head" class="w-24 h-24 rounded-full border-4 border-gray-600" />
+      <h1 id="player-name" class="text-3xl font-bold"></h1>
+    </div>
+    <div class="bg-card rounded-lg shadow p-6 space-y-2 text-lg">
+      <p><strong>Team:</strong> <span id="stat-team"></span></p>
+      <p><strong>Goals:</strong> <span id="stat-goals"></span></p>
+      <p><strong>Assists:</strong> <span id="stat-assists"></span></p>
+      <p><strong>Points:</strong> <span id="stat-pts"></span></p>
+      <p><strong>+/-:</strong> <span id="stat-plusMinus"></span></p>
+      <p><strong>Touches:</strong> <span id="stat-touches"></span></p>
+    </div>
+    <div class="mt-10">
+      <a href="index.html" class="text-blue-400 hover:underline">&larr; Back to stats</a>
+    </div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+
+    if (!name) {
+      document.body.innerHTML = '<div class="text-center text-white text-2xl mt-20">Player not found.</div>';
+    } else {
+      document.getElementById("player-head").src = `https://minotar.net/avatar/${name}/100.png`;
+      document.getElementById("player-name").textContent = name;
+
+      fetch("player_stats.json")
+        .then(res => res.json())
+        .then(players => {
+          const player = players.find(p => p.player === name);
+          if (!player) {
+            document.body.innerHTML = '<div class="text-center text-white text-2xl mt-20">Player not found.</div>';
+            return;
+          }
+          document.getElementById("stat-team").textContent = player.team;
+          document.getElementById("stat-goals").textContent = player.goals;
+          document.getElementById("stat-assists").textContent = player.assists;
+          document.getElementById("stat-pts").textContent = player.goals + player.assists;
+          document.getElementById("stat-plusMinus").textContent = player.plusMinus ?? 0;
+          document.getElementById("stat-touches").textContent = player.touches ?? 0;
+        });
+    }
+  </script>
+</body>
+</html>
