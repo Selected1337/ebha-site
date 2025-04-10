@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "player": "Spray_23",
+    "team": "LLM",
+    "goals": 4,
+    "assists": 3,
+    "hits": "0",
+    "touches": 49
+  },
+  {
+    "player": "Kuzy_God",
+    "team": "OBO",
+    "goals": 2,
+    "assists": 3,
+    "hits": "0",
+    "touches": 83
+  },
+  {
+    "player": "_JacksonBlake",
+    "team": "LLM",
+    "goals": 5,
+    "assists": 6,
+    "hits": "0",
+    "touches": 69
+  },
+  {
+    "player": "rdubsss23",
+    "team": "LLM",
+    "goals": 5,
+    "assists": 4,
+    "hits": "0",
+    "touches": 76
+  },
+  {
+    "player": "Clifford82",
+    "team": "OBO",
+    "goals": 15,
+    "assists": 0,
+    "hits": "0",
+    "touches": 141
+  }
+]
