@@ -129,7 +129,7 @@
     }
 
     function updateSortArrows() {
-      ['player','team','gamesplayed','goals','assists','pts','hits','touches'].forEach(k => {
+      ['player','team','gp','goals','assists','pts','hits','touches'].forEach(k => {
         document.getElementById(`arrow-${k}`).textContent = (currentSortKey === k) ? (sortDirection === 'desc' ? '↓' : '↑') : '';
       });
     }
