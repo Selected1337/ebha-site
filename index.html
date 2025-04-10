@@ -72,10 +72,11 @@
           <tr>
             <th class="p-2 cursor-pointer" onclick="sortPlayers('player')">Player <span id="arrow-player" class="sort-arrow"></span></th>
             <th class="p-2 cursor-pointer" onclick="sortPlayers('team')">Team <span id="arrow-team" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('gamesplayed')">GP <span id="arrow-gp" class="sort-arrow"></span></th>
             <th class="p-2 cursor-pointer" onclick="sortPlayers('goals')">G <span id="arrow-goals" class="sort-arrow"></span></th>
             <th class="p-2 cursor-pointer" onclick="sortPlayers('assists')">A <span id="arrow-assists" class="sort-arrow"></span></th>
             <th class="p-2 cursor-pointer" onclick="sortPlayers('pts')">PTS <span id="arrow-pts" class="sort-arrow"></span></th>
-            <th class="p-2 cursor-pointer" onclick="sortPlayers('hits')">Hits <span id="arrow-plusMinus" class="sort-arrow"></span></th>
+            <th class="p-2 cursor-pointer" onclick="sortPlayers('hits')">Hits <span id="arrow-hits" class="sort-arrow"></span></th>
             <th class="p-2 cursor-pointer" onclick="sortPlayers('touches')">Touches <span id="arrow-touches" class="sort-arrow"></span></th>
           </tr>
         </thead>
@@ -128,7 +129,7 @@
     }
 
     function updateSortArrows() {
-      ['player','team','goals','assists','pts','plusMinus','touches'].forEach(k => {
+      ['player','team','gamesplayed','goals','assists','pts','hits','touches'].forEach(k => {
         document.getElementById(`arrow-${k}`).textContent = (currentSortKey === k) ? (sortDirection === 'desc' ? '↓' : '↑') : '';
       });
     }
@@ -170,7 +171,7 @@
           <td class="p-2">${p.goals}</td>
           <td class="p-2">${p.assists}</td>
           <td class="p-2">${p.pts}</td>
-          <td class="p-2">${p.plusMinus}</td>
+          <td class="p-2">${p.hits}</td>
           <td class="p-2">${p.touches}</td>
         </tr>`;
       });
@@ -206,10 +207,11 @@
               <h3 class="text-lg font-bold mb-2">${player.player}</h3>
               <ul class="space-y-1">
                 <li><strong>Team:</strong> ${player.team}</li>
+                <li><strong>gamesplayed:</strong> ${player.gamesplayed}</li>
                 <li><strong>Goals:</strong> ${player.goals}</li>
                 <li><strong>Assists:</strong> ${player.assists}</li>
                 <li><strong>Points:</strong> ${player.pts}</li>
-                <li><strong>+/-:</strong> ${player.plusMinus}</li>
+                <li><strong>+/-:</strong> ${player.hits}</li>
                 <li><strong>Touches:</strong> ${player.touches}</li>
               </ul>
             </div></div>`;
@@ -226,7 +228,7 @@
       sortedPlayers = players.map(p => ({
         ...p,
         pts: p.goals + p.assists,
-        plusMinus: p.plusMinus || 0,
+        hits: p.hits || 0,
         touches: p.touches || 0
       })).sort((a,b) => b[currentSortKey] - a[currentSortKey]);
 
