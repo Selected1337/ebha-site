@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "player": "Clifford82",
+    "team": "OBO",
+    "goals": 27,
+    "assists": 5,
+    "hits": "0430",
+    "touches": 129,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "CookieMnstr1616",
+    "team": "MIS",
+    "goals": 6,
+    "assists": 1,
+    "hits": "0599",
+    "touches": 69,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "rdubsss23",
+    "team": "MIS",
+    "goals": 2,
+    "assists": 2,
+    "hits": "0339",
+    "touches": 75,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "_JacksonBlake",
+    "team": "MIS",
+    "goals": 11,
+    "assists": 1,
+    "hits": "0418",
+    "touches": 72,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "Tendy41",
+    "team": "OBO",
+    "goals": 16,
+    "assists": 4,
+    "hits": "0205",
+    "touches": 126,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "OnlyBirb",
+    "team": "OBO",
+    "goals": 5,
+    "assists": 4,
+    "hits": "0920",
+    "touches": 67,
+    "gamesPlayed": 2
+  }
+]
