@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Player Stats - Minecraft Hockey Beer League</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#ffffff',
+            card: '#f9f9f9',
+            text: '#000000'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-text">
+  <header class="p-6 text-center text-3xl font-bold border-b">Player Stats</header>
+
+  <main class="max-w-7xl mx-auto p-4 overflow-x-auto">
+    <table class="min-w-full border text-sm" id="stats-table">
+      <thead>
+        <tr class="bg-card font-semibold text-left">
+          <th class="p-2 cursor-pointer">Player</th>
+          <th class="p-2 cursor-pointer">GP</th>
+          <th class="p-2 cursor-pointer">G</th>
+          <th class="p-2 cursor-pointer">A</th>
+          <th class="p-2 cursor-pointer">PTS</th>
+          <th class="p-2 cursor-pointer">Hits</th>
+          <th class="p-2 cursor-pointer">Touches</th>
+          <th class="p-2 cursor-pointer">SA</th>
+          <th class="p-2 cursor-pointer">SV</th>
+          <th class="p-2 cursor-pointer">GA</th>
+          <th class="p-2 cursor-pointer">SV%</th>
+          <th class="p-2 cursor-pointer">GAA</th>
+        </tr>
+      </thead>
+      <tbody id="stats-body" class="bg-white">
+        <!-- JS will populate -->
+      </tbody>
+    </table>
+  </main>
+
+  <script src="js/renderStats.js"></script>
+</body>
+</html>

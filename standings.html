@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Standings - Minecraft Hockey Beer League</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#ffffff',
+            card: '#f9f9f9',
+            text: '#000000'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-text">
+  <header class="p-6 text-center text-3xl font-bold border-b">League Standings</header>
+
+  <main class="max-w-6xl mx-auto p-4">
+    <div class="flex justify-center gap-4 mb-4">
+      <button class="tab px-4 py-2 border rounded bg-black text-white" onclick="showTab('league')">League</button>
+      <button class="tab px-4 py-2 border rounded" onclick="showTab('conference')">Conference</button>
+      <button class="tab px-4 py-2 border rounded" onclick="showTab('division')">Division</button>
+    </div>
+
+    <div id="standings-container">
+      <!-- JS will fill this -->
+    </div>
+  </main>
+
+  <script src="js/renderStandings.js"></script>
+</body>
+</html>
