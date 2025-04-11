@@ -9,13 +9,22 @@
     "gamesPlayed": 2
   },
   {
+    "player": "Average_Tank",
+    "team": "LLM",
+    "goals": 3,
+    "assists": 2,
+    "hits": "0201",
+    "touches": 131,
+    "gamesPlayed": 2
+  },
+  {
     "player": "Clifford82",
     "team": "OBO",
-    "goals": 39,
-    "assists": 5,
-    "hits": "043037",
-    "touches": 162,
-    "gamesPlayed": 3
+    "goals": 43,
+    "assists": 6,
+    "hits": "04303787",
+    "touches": 206,
+    "gamesPlayed": 4
   },
   {
     "player": "CookieMnstr1616",
@@ -38,11 +47,11 @@
   {
     "player": "_JacksonBlake",
     "team": "MIS",
-    "goals": 11,
-    "assists": 1,
-    "hits": "0418",
-    "touches": 72,
-    "gamesPlayed": 2
+    "goals": 17,
+    "assists": 2,
+    "hits": "0418221",
+    "touches": 137,
+    "gamesPlayed": 3
   },
   {
     "player": "Icespillermc",
@@ -56,11 +65,11 @@
   {
     "player": "Tendy41",
     "team": "OBO",
-    "goals": 31,
-    "assists": 6,
-    "hits": "020511106",
-    "touches": 224,
-    "gamesPlayed": 4
+    "goals": 35,
+    "assists": 8,
+    "hits": "020511106168",
+    "touches": 326,
+    "gamesPlayed": 5
   },
   {
     "player": "OnlyBirb",
