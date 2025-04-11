@@ -1,0 +1,83 @@
+[
+  {
+    "player": "Spray_23",
+    "team": "LLM",
+    "goals": 2,
+    "assists": 0,
+    "hits": "027",
+    "touches": 26,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "Average_Tank",
+    "team": "LLM",
+    "goals": 3,
+    "assists": 2,
+    "hits": "0201",
+    "touches": 131,
+    "gamesPlayed": 2
+  },
+  {
+    "player": "Clifford82",
+    "team": "OBO",
+    "goals": 43,
+    "assists": 6,
+    "hits": "04303787",
+    "touches": 206,
+    "gamesPlayed": 4
+  },
+  {
+    "player": "CookieMnstr1616",
+    "team": "MIS",
+    "goals": 17,
+    "assists": 8,
+    "hits": "0599416655",
+    "touches": 168,
+    "gamesPlayed": 5
+  },
+  {
+    "player": "rdubsss23",
+    "team": "MIS",
+    "goals": 28,
+    "assists": 8,
+    "hits": "033973148121192",
+    "touches": 561,
+    "gamesPlayed": 6
+  },
+  {
+    "player": "_JacksonBlake",
+    "team": "MIS",
+    "goals": 67,
+    "assists": 2,
+    "hits": "041822110673166223106",
+    "touches": 744,
+    "gamesPlayed": 8
+  },
+  {
+    "player": "Icespillermc",
+    "team": "OBO",
+    "goals": 11,
+    "assists": 1,
+    "hits": "01917479",
+    "touches": 226,
+    "gamesPlayed": 4
+  },
+  {
+    "player": "Tendy41",
+    "team": "OBO",
+    "goals": 56,
+    "assists": 15,
+    "hits": "020511106168130210",
+    "touches": 640,
+    "gamesPlayed": 7
+  },
+  {
+    "player": "OnlyBirb",
+    "team": "OBO",
+    "goals": 5,
+    "assists": 4,
+    "hits": "0920",
+    "touches": 67,
+    "gamesPlayed": 2
+  }
+]
